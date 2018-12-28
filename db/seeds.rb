@@ -4,7 +4,7 @@ Plan.create!(stripe_id: "basic-monthly-2", name: "Monthly", price: 3, price_tier
 Plan.create!(stripe_id: "basic-yearly-2", name: "Yearly", price: 30, price_tier: 2)
 Plan.create!(stripe_id: "basic-monthly-3", name: "Monthly", price: 5, price_tier: 3)
 Plan.create!(stripe_id: "basic-yearly-3", name: "Yearly", price: 50, price_tier: 3)
-Plan.create!(stripe_id: "free", name: "Free", price: 0, price_tier: 3)
+free_plan = Plan.create!(stripe_id: "free", name: "Free", price: 0, price_tier: 3)
 Plan.create!(stripe_id: "timed", name: "Timed", price: 0, price_tier: 3)
 Plan.create!(stripe_id: "timed", name: "Timed", price: 0, price_tier: 2)
 plan = Plan.create!(stripe_id: "trial", name: "Trial", price: 0, price_tier: 3)
@@ -25,3 +25,11 @@ if Rails.env.development?
   u.update_auth_token = true
   u.save
 end
+
+if Rails.env.production?
+  u = User.new(email: "test@example.com", password: "test", password_confirmation: "test", admin: true)
+  u.plan = free_plan
+  u.update_auth_token = true
+  u.save
+end
+
